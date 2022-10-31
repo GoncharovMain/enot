@@ -10,6 +10,9 @@ namespace Enot
 		public Position(double x, double y) => (X, Y) = (x, y);
 
 		public override string ToString() => $"X: {X} Y: {Y}";
+
+		public static Position operator+(Position a, Position b)
+			=> new Position(a.X + b.X, a.Y + b.Y);
 	}
 
 	public class Program
