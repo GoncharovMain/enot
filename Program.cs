@@ -13,6 +13,13 @@ namespace Enot
 
 		public override string ToString() => $"X: {X} Y: {Y}";
 
+
+		public static bool operator ==(Position a, Position b)
+			=> a.X == b.X && a.Y == b.Y;
+
+		public static bool operator !=(Position a, Position b)
+			=> !(a == b);
+
 		public static Position operator+(Position a, Position b)
 			=> new Position(a.X + b.X, a.Y + b.Y);
 	}
