@@ -2,6 +2,8 @@ using System;
 
 namespace Enot
 {
+	/// X - vertical
+	/// Y - horizontal
 	public class Position
 	{
 		public double X { get; set; }
