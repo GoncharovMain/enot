@@ -1,0 +1,17 @@
+requests:
+  catalogue:
+    method: Get
+    url: https://yoomoney.ru/catalogue/phone
+    headers:
+      host: yoomoney.ru
+      referrer: https://yoomoney.ru
+    body:
+    response:
+  phone-beeline:
+    method: Get
+    url: https://yoomoney.ru/phone?sum=&netSum=&phone-prefix=&phone-number=&scid=&phone-operator=beeline-343
+    headers:
+      host: yoomoney.ru
+      referrer: https://yoomoney.ru
+    body: 
+    response: 

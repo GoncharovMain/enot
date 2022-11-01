@@ -1,1 +1,5 @@
 *.exe
+
+/RequestYaml/bin/*
+/RequestYaml/obj/*
+/RequestYaml/.vs/*
