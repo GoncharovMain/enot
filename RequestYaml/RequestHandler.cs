@@ -1,81 +1,12 @@
 using System.Net;
 using System.Net.Http.Headers;
-
+using AutoMapper;
 
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
-#nullable disable
-
 namespace RequestYaml
 {
-	public static class HeaderExtensions
-	{
-		public static void SetHeaders(this HttpRequestHeaders httpRequestHeaders, Header headers)
-		{
-			httpRequestHeaders.Host = headers?.Host;
-			httpRequestHeaders.Referrer = new Uri(headers?.Referrer);
-		}
-	}
-
-	public class DataRequest
-	{
-		public Dictionary<string, Request> Requests { get; set; }
-	}
-
-	public enum MethodRequest
-	{
-		Get = 0,
-		Post = 1,
-		Put = 2,
-		Delete = 3,
-		Patch = 4
-	}
-
-	public class Header 
-	{
-		public string Host { get; set; }
-		public string Referrer { get; set; }
-	}
-
-	public class Body
-	{
-		public string MimeType { get; set; }
-		public string PostData { get; set; }
-	}
-
-	public class Request
-	{
-		public MethodRequest Method { get; set; }
-		public string Url { get; set; }
-		public Header Headers { get; set; }
-		public Body Body { get; set; }
-		public Response Response { get; set; }
-	}
-
-	public class Response
-	{
-
-		public delegate Dictionary<string, string> ParseCookie(Func<bool> predicate);
-	    public event ParseCookie ParseCookieHandler;
-
-		public int Status { get; set; }
-		public string StatusText { get; set; }
-		public string Content { get; set; }
-
-		public Dictionary<string, string> Cookie { get; set; }
-
-		public static implicit operator Response(HttpResponseMessage response)
-			=> new Response {
-				Status = (int)response.StatusCode,
-				StatusText = response.StatusCode.ToString(),
-				Content = response.Content.ReadAsStringAsync().Result
-
-				
-			};
-		
-	}
-
 	public class RequestHandler
 	{
 		private HttpClient _client;
