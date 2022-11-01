@@ -1,4 +1,5 @@
 requests:
+
   catalogue:
     method: Get
     url: https://yoomoney.ru/catalogue/phone
@@ -7,11 +8,29 @@ requests:
       referrer: https://yoomoney.ru
     body:
     response:
+      returnFolders:
+        sk:
+        orderId:
+
   phone-beeline:
     method: Get
     url: https://yoomoney.ru/phone?sum=&netSum=&phone-prefix=&phone-number=&scid=&phone-operator=beeline-343
     headers:
       host: yoomoney.ru
       referrer: https://yoomoney.ru
-    body: 
-    response: 
+    body:
+    response:
+      returnFolders:
+        sk:
+        orderId:
+
+  internal:
+    method: Get
+    url: https://yoomoney.ru/payments/internal?customerNumber=960+5077707&netSum=500&scid=928&sum=510&PROPERTY1=960&PROPERTY2=5077707&from-efos-showcase=
+    headers:
+      host: yoomoney.ru
+    response:
+      returnFolders:
+        sk:
+        orderId:
+

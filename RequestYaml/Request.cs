@@ -7,5 +7,6 @@ namespace RequestYaml
 		public Header Headers { get; set; }
 		public Body Body { get; set; }
 		public Response Response { get; set; }
-	}
+		public Dictionary<string, string> Cookie { get; set; }
+    }
 }

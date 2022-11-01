@@ -47,6 +47,13 @@ namespace RequestYaml
 					 			Host = "yoomoney.ru",
 					 			Referrer = "https://yoomoney.ru"
 					 		},
+							Response = new Response
+							{
+								ReturnFolders = new Dictionary<string, string>
+								{
+									{ "asdf", "asdf" }
+								}
+							}
 				 		}
 			 		},
 				 	{	
@@ -71,7 +78,7 @@ namespace RequestYaml
 
 			Console.WriteLine(yaml);
 
-			using (StreamWriter writer = new StreamWriter("request.yaml"))
+			using (StreamWriter writer = new StreamWriter("request1.yaml"))
 			{
 				writer.Write(yaml);
 			}
@@ -81,10 +88,17 @@ namespace RequestYaml
 		public async Task<Response> HandleRequestAsync(string nameRequest)
 		{
 			Request request = _requests.Requests[nameRequest];
-			return await RequestAsync(request);
+            request.Response = await RequestAsync(request);
+
+			return request.Response;
 		}
 
-		public async Task<HttpResponseMessage> RequestAsync(Request request)
+		public Request this[string name]
+		{
+			get => _requests.Requests[name];
+		}
+
+        public async Task<HttpResponseMessage> RequestAsync(Request request)
 			=> request.Method switch 
 				{
 					MethodRequest.Get => await _client.GetAsync(request.Url),

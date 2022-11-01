@@ -14,7 +14,9 @@ namespace RequestYaml
 		public string StatusText { get; set; }
 		public string Content { get; set; }
 
-		public Dictionary<string, string> Cookie { get; set; }
+        public Dictionary<string, string> ReturnFolders { get; set; }
+
+        public Dictionary<string, string> Cookie { get; set; }
 
 		public static implicit operator Response(HttpResponseMessage response)
 			=> new Response {

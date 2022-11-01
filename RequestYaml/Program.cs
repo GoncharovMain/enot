@@ -6,13 +6,28 @@
 		{
             RequestHandler requestHandler = new RequestHandler("C:\\Users\\yuriy.goncharov\\Desktop\\hu\\goncharov\\enot\\RequestYaml\\request.yaml");
 
-			Response result = await requestHandler.HandleRequestAsync("catalogue");
-			
-			Console.WriteLine(result.Content.Substring(0, 150));
+			//RequestHandler requestHandler = new RequestHandler();
+			//requestHandler.WriteYamlAsync();
 
-			result = await requestHandler.HandleRequestAsync("phone-beeline");
+            Response catalogue = await requestHandler.HandleRequestAsync("catalogue");
 			
-			Console.WriteLine(result.Content.Substring(0, 150));
+			Console.WriteLine(catalogue.Content.Substring(0, 150));
+
+
+
+			requestHandler["catalogue"].Cookie = catalogue.Cookie;
+
+            Response phoneBeeline = await requestHandler.HandleRequestAsync("phone-beeline");
+			
+			Console.WriteLine(phoneBeeline.Content.Substring(0, 150));
+
+			Response paymentsInternal = await requestHandler.HandleRequestAsync("internal");
+
+			string qwe = paymentsInternal?.ReturnFolders["sk"] ?? "Null";
+
+
+			Console.WriteLine($"paymentsInternal : {paymentsInternal.Content.Substring(0, 200)}");
+
 
 
             Console.WriteLine();
