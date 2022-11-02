@@ -1,33 +1,56 @@
 ﻿namespace RequestYaml
 {
-	public class Program
+    public static class StringExtensions
+    {
+        public static string GetStrBetweenTags(this string value, string startTag, string endTag, StringComparison stringComparison = StringComparison.CurrentCulture)
+        {
+            if (value.Contains(startTag) && value.Contains(endTag))
+            {
+                var startIndex = value.IndexOf(startTag, stringComparison) + startTag.Length;
+                var endIndex = value.IndexOf(endTag, startIndex, stringComparison);
+
+                if (startIndex >= endIndex) return "";
+
+                return value[startIndex..endIndex];
+            }
+
+            return null;
+        }
+    }
+    public class Program
 	{
-		public static async Task Main()
+		
+        public static async Task Main()
 		{
-            RequestHandler requestHandler = new RequestHandler("C:\\Users\\yuriy.goncharov\\Desktop\\hu\\goncharov\\enot\\RequestYaml\\request.yaml");
+            YamlRequestCollection requestHandler = new YamlRequestCollection("C:\\Users\\yuriy.goncharov\\Desktop\\hu\\goncharov\\enot\\RequestYaml\\request.yaml");
 
-			//RequestHandler requestHandler = new RequestHandler();
-			//requestHandler.WriteYamlAsync();
+            Request requestCatalogue = requestHandler["catalogue"];
 
-            Response catalogue = await requestHandler.HandleRequestAsync("catalogue");
-			
-			Console.WriteLine(catalogue.Content.Substring(0, 150));
+            Response responseCatalogue = await requestCatalogue.RequestAsync();
 
 
 
-			requestHandler["catalogue"].Cookie = catalogue.Cookie;
-
-            Response phoneBeeline = await requestHandler.HandleRequestAsync("phone-beeline");
-			
-			Console.WriteLine(phoneBeeline.Content.Substring(0, 150));
-
-			Response paymentsInternal = await requestHandler.HandleRequestAsync("internal");
-
-			string qwe = paymentsInternal?.ReturnFolders["sk"] ?? "Null";
 
 
-			Console.WriteLine($"paymentsInternal : {paymentsInternal.Content.Substring(0, 200)}");
 
+            #region Internal request
+
+            Request requestInternal = requestHandler["internal"];
+
+            requestInternal.ParseExpectedFieldsHandler = content =>
+                new Dictionary<string, string>()
+                {
+                    { "sk", content.GetStrBetweenTags("sk=", "&amp;retpath") },
+                    { "orderId", content.GetStrBetweenTags("orderId=", "&amp;preselectedPaymentType") }
+                };
+
+            requestInternal.ParseCookieHandler = header => header.GetValues("set-cookie")
+				.Select(cookie => cookie.Split(new char[] { '=', ';' }, 3))
+				.ToDictionary(cookie => cookie[0], cookie => cookie[1]);
+
+            Response responseInternal = await requestHandler.RequestAsync("internal");
+
+            #endregion Internal request
 
 
             Console.WriteLine();

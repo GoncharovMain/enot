@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Reflection.Metadata.Ecma335;
 
 namespace RequestYaml
 {
@@ -13,20 +13,8 @@ namespace RequestYaml
 		public int Status { get; set; }
 		public string StatusText { get; set; }
 		public string Content { get; set; }
-
-        public Dictionary<string, string> ReturnFolders { get; set; }
-
         public Dictionary<string, string> Cookie { get; set; }
-
-		public static implicit operator Response(HttpResponseMessage response)
-			=> new Response {
-				Status = (int)response.StatusCode,
-				StatusText = response.StatusCode.ToString(),
-				Content = response.Content.ReadAsStringAsync().Result,
-				Cookie = response.Headers.GetValues("set-cookie")
-					.Select(cookie => cookie.Split(new char[] { '=', ';' }, 3))
-					.ToDictionary(value => value[0], value => value[1])
-			};
+        public Dictionary<string, string> ExpectedFields { get; set; }
 	}
 
 	public class MappingResponseProfile : Profile

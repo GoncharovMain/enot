@@ -1,6 +1,6 @@
 namespace RequestYaml
 {
-	public enum MethodRequest
+	public enum Method
 	{
 		Get = 0,
 		Post = 1,

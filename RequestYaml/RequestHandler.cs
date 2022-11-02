@@ -7,17 +7,17 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace RequestYaml
 {
-	public class RequestHandler
+	public class YamlRequestCollection
 	{
 		private HttpClient _client;
 		private DataRequest _requests;
 
-		public RequestHandler()
+		public YamlRequestCollection()
 		{
 		 	_client = new HttpClient();
 		}
 
-		public RequestHandler(string src) : this()
+		public YamlRequestCollection(string src) : this()
 		{
 			using (StreamReader reader = new StreamReader(src))
 			{
@@ -41,7 +41,7 @@ namespace RequestYaml
 		 			{ 
 		 				"catalogue", 
 			 			new Request {
-				 			Method = MethodRequest.Get,
+				 			Method = Method.Get,
 							Url = "https://yoomoney.ru/catalogue/phone",
 							Headers = new Header {
 					 			Host = "yoomoney.ru",
@@ -49,7 +49,7 @@ namespace RequestYaml
 					 		},
 							Response = new Response
 							{
-								ReturnFolders = new Dictionary<string, string>
+								ExpectedFields = new Dictionary<string, string>
 								{
 									{ "asdf", "asdf" }
 								}
@@ -59,7 +59,7 @@ namespace RequestYaml
 				 	{	
 				 		"phone-beeline",
 				 		new Request {
-				 			Method = MethodRequest.Get,
+				 			Method = Method.Get,
 					 		Url = "https://yoomoney.ru/phone?sum=&netSum=&phone-prefix=&phone-number=&scid=&phone-operator=beeline-343",
 					 		Headers = new Header {
 					 			Host = "yoomoney.ru",
@@ -85,25 +85,36 @@ namespace RequestYaml
 		}
 
 
-		public async Task<Response> HandleRequestAsync(string nameRequest)
+		public async Task<Response> RequestAsync(string nameRequest)
 		{
 			Request request = _requests.Requests[nameRequest];
-            request.Response = await RequestAsync(request);
+			
+			HttpResponseMessage httpResponseMessage = await MethodAsync(request);
+
+            request.Response = new Response
+			{
+				Status = (int)httpResponseMessage.StatusCode,
+				StatusText = httpResponseMessage.StatusCode.ToString(),
+				Content = await httpResponseMessage.Content.ReadAsStringAsync(),
+            };
+
+			if (request.ParseCookieHandler != null)
+				request.Cookie = request.ParseCookieHandler(httpResponseMessage.Headers);
+
+            if (request.ParseExpectedFieldsHandler != null)
+	            request.Response.ExpectedFields = request.ParseExpectedFieldsHandler(request.Response.Content);
 
 			return request.Response;
 		}
 
-		public Request this[string name]
-		{
-			get => _requests.Requests[name];
-		}
-
-        public async Task<HttpResponseMessage> RequestAsync(Request request)
+		public Request this[string name] => _requests.Requests[name];
+		
+        public async Task<HttpResponseMessage> MethodAsync(Request request)
 			=> request.Method switch 
 				{
-					MethodRequest.Get => await _client.GetAsync(request.Url),
-					MethodRequest.Post => await _client.PostAsync(request.Url, new StringContent(request.Body.PostData)),
-					MethodRequest.Delete => await _client.DeleteAsync(request.Url),
+					Method.Get => await _client.GetAsync(request.Url),
+					Method.Post => await _client.PostAsync(request.Url, new StringContent(request.Body.PostData)),
+					Method.Delete => await _client.DeleteAsync(request.Url),
 					_ => default
                 };
 		

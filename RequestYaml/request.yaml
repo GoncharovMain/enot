@@ -3,34 +3,50 @@ requests:
   catalogue:
     method: Get
     url: https://yoomoney.ru/catalogue/phone
+    queryString:
     headers:
       host: yoomoney.ru
       referrer: https://yoomoney.ru
     body:
     response:
-      returnFolders:
+      expectedFields:
         sk:
         orderId:
 
   phone-beeline:
     method: Get
-    url: https://yoomoney.ru/phone?sum=&netSum=&phone-prefix=&phone-number=&scid=&phone-operator=beeline-343
+    url: https://yoomoney.ru/phone
+    queryString:
+      sum:
+      netSum:
+      phone-prefix:
+      phone-number:
+      scid:
+      phone-operator: beeline-343
     headers:
       host: yoomoney.ru
       referrer: https://yoomoney.ru
     body:
     response:
-      returnFolders:
+      expectedFields:
         sk:
         orderId:
 
   internal:
     method: Get
-    url: https://yoomoney.ru/payments/internal?customerNumber=960+5077707&netSum=500&scid=928&sum=510&PROPERTY1=960&PROPERTY2=5077707&from-efos-showcase=
+    url: https://yoomoney.ru/payments/internal
+    queryString:
+      customerNumber: 960 5077707
+      netSum: 500
+      scid: 928
+      sum: 510
+      PROPERTY1: 960
+      PROPERTY2: 5077707
+      from-efos-showcase:
     headers:
       host: yoomoney.ru
     response:
-      returnFolders:
+      expectedFields:
         sk:
         orderId:
 
