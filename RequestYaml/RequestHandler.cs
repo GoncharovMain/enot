@@ -7,15 +7,16 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace RequestYaml
 {
-	public class YamlRequestCollection
+	public class RequestCollection
 	{
-		private HttpClient _client;
-		private DataRequest _requests;
+		protected DataRequest _requests;
 
-		public YamlRequestCollection()
-		{
-		 	_client = new HttpClient();
-		}
+        public Request this[string name] => _requests.Requests[name];
+    }
+
+	public class YamlRequestCollection : RequestCollection
+	{
+		public YamlRequestCollection() : base() { }
 
 		public YamlRequestCollection(string src) : this()
 		{
@@ -83,40 +84,5 @@ namespace RequestYaml
 				writer.Write(yaml);
 			}
 		}
-
-
-		public async Task<Response> RequestAsync(string nameRequest)
-		{
-			Request request = _requests.Requests[nameRequest];
-			
-			HttpResponseMessage httpResponseMessage = await MethodAsync(request);
-
-            request.Response = new Response
-			{
-				Status = (int)httpResponseMessage.StatusCode,
-				StatusText = httpResponseMessage.StatusCode.ToString(),
-				Content = await httpResponseMessage.Content.ReadAsStringAsync(),
-            };
-
-			if (request.ParseCookieHandler != null)
-				request.Cookie = request.ParseCookieHandler(httpResponseMessage.Headers);
-
-            if (request.ParseExpectedFieldsHandler != null)
-	            request.Response.ExpectedFields = request.ParseExpectedFieldsHandler(request.Response.Content);
-
-			return request.Response;
-		}
-
-		public Request this[string name] => _requests.Requests[name];
-		
-        public async Task<HttpResponseMessage> MethodAsync(Request request)
-			=> request.Method switch 
-				{
-					Method.Get => await _client.GetAsync(request.Url),
-					Method.Post => await _client.PostAsync(request.Url, new StringContent(request.Body.PostData)),
-					Method.Delete => await _client.DeleteAsync(request.Url),
-					_ => default
-                };
-		
 	}
 }

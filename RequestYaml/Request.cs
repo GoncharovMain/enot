@@ -46,7 +46,7 @@ namespace RequestYaml
             };
 
             if (ParseCookieHandler != null)
-                Cookie = ParseCookieHandler(httpResponseMessage.Headers);
+                Response.Cookie = ParseCookieHandler(httpResponseMessage.Headers);
 
             if (ParseExpectedFieldsHandler != null)
                 Response.ExpectedFields = ParseExpectedFieldsHandler(Response.Content);
@@ -58,19 +58,16 @@ namespace RequestYaml
             => Method switch
             {
                 Method.Get => await _client.GetAsync(Url),
-                Method.Post => await _client.PostAsync(Url, new StringContent(Body.PostData)),
+                Method.Post => await _client.PostAsync(Url, Body.PostData),
                 Method.Delete => await _client.DeleteAsync(Url),
                 _ => default
             };
-
 
         public delegate Dictionary<string, string> ParseToDictionary<in T>(T content);
 
 		public ParseToDictionary<string> ParseExpectedFieldsHandler = null;
 
-		public ParseToDictionary<HttpResponseHeaders> ParseCookieHandler;/* = headers => headers.GetValues("set-cookie")
-                    .Select(cookie => cookie.Split(new char[] { '=', ';' }, 3))
-                    .ToDictionary(value => value[0], value => value[1]);*/
+		public ParseToDictionary<HttpResponseHeaders> ParseCookieHandler;
 
     }
 }

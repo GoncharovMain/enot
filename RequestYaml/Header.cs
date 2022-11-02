@@ -4,5 +4,6 @@ namespace RequestYaml
 	{
 		public string Host { get; set; }
 		public string Referrer { get; set; }
+		public string Origin { get; set; }
 	}
 }

@@ -15,6 +15,12 @@ namespace RequestYaml
 		public string Content { get; set; }
         public Dictionary<string, string> Cookie { get; set; }
         public Dictionary<string, string> ExpectedFields { get; set; }
+
+		public override string ToString()
+			=> $"Status: {Status}\n" +
+				$"StatusText: {StatusText}\n" +
+				$"Content: {Content.Substring(0, 50)}{(Content.Length > 50 ? "..." : String.Empty)}\n";
+		
 	}
 
 	public class MappingResponseProfile : Profile
