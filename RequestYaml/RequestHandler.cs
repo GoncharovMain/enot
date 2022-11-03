@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Net;
 using System.Net.Http.Headers;
 using AutoMapper;
@@ -7,12 +8,22 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace RequestYaml
 {
-	public class RequestCollection
+	public class RequestCollection : IEnumerable<Request>
 	{
 		protected DataRequest _requests;
 
         public Request this[string name] => _requests.Requests[name];
-    }
+
+		public IEnumerator<Request> GetEnumerator()
+		{
+			foreach (Request request in _requests.Requests.Values)
+			{
+				yield return request;
+			}
+		}
+
+		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+	}
 
 	public class YamlRequestCollection : RequestCollection
 	{
@@ -30,7 +41,10 @@ namespace RequestYaml
 
 				_requests = deserializer.Deserialize<DataRequest>(yml);
 			}
-		}
+
+			foreach (string name in _requests.Requests.Keys)
+				_requests.Requests[name].Name = name;
+        }
 
 		public void WriteYamlAsync()
 		{
@@ -48,6 +62,14 @@ namespace RequestYaml
 					 			Host = "yoomoney.ru",
 					 			Referrer = "https://yoomoney.ru"
 					 		},
+							Body = new Body
+							{
+								MimeType = "string",
+								PostData = new Dictionary<string, string>
+								{
+									{ "content", @"{\""name\"": \""Tom\"" }" }
+								}
+							},
 							Response = new Response
 							{
 								ExpectedFields = new Dictionary<string, string>

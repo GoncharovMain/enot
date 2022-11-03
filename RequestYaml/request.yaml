@@ -1,37 +1,5 @@
 requests:
 
-  catalogue:
-    method: Get
-    url: https://yoomoney.ru/catalogue/phone
-    queryString:
-    headers:
-      host: yoomoney.ru
-      referrer: https://yoomoney.ru
-    body:
-    response:
-      expectedFields:
-        sk:
-        orderId:
-
-  phone-beeline:
-    method: Get
-    url: https://yoomoney.ru/phone
-    queryString:
-      sum:
-      netSum:
-      phone-prefix:
-      phone-number:
-      scid:
-      phone-operator: beeline-343
-    headers:
-      host: yoomoney.ru
-      referrer: https://yoomoney.ru
-    body:
-    response:
-      expectedFields:
-        sk:
-        orderId:
-
   internal:
     method: Get
     url: https://yoomoney.ru/payments/internal
@@ -43,12 +11,58 @@ requests:
       PROPERTY1: 960
       PROPERTY2: 5077707
       from-efos-showcase:
+
     headers:
       host: yoomoney.ru
+      origin: https://yoomoney.ru
+      referrer:
+      userAgent:
+      accept: application/json, text/javascript, */*; q=0.01
+      acceptLanguage: ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3
+      acceptEncoding: gzip,deflate, br
+      acceptCharset:
+      connection: keep-alive
+      other:
+        DNT: 1
+        Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+
     response:
       expectedFields:
         sk:
         orderId:
+
+
+  storecard:
+    method: Post
+    url: https://paymentcard.yoomoney.ru/webservice/storecard/api/storeCardForPayment
+    headers:
+      host: paymentcard.yoomoney.ru
+      origin: https://yoomoney.ru
+      referrer: https://yoomoney.ru/
+      userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0
+      accept: application/json, text/javascript, */*; q=0.01
+      acceptLanguage: ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3
+      acceptEncoding: gzip, deflate, br
+      connection: keep-alive
+      other:
+        DNT: 1
+        Sec-Fetch-Dest: empty
+        Sec-Fetch-Mode: cors
+        Sec-Fetch-Site: same-origin
+        TE: trailers
+    body:
+      format: json
+      mimeType: application/x-www-form-urlencoded
+      postData:
+        cardholder: CARD HOLDER
+        csc: 421
+        pan: 2202201853818470
+        expireDate: 202306
+    response:
+      expectedFields:
+        status:
+        cardSynonym:
+
 
   orderId:
     method: Post
@@ -58,20 +72,37 @@ requests:
     headers:
       host: yoomoney.ru
       origin: https://yoomoney.ru
+      referrer:
+      userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:106.0) Gecko/20100101 Firefox/106.0
+      accept: application/json, text/javascript, */*; q=0.01
+      acceptLanguage: ru-RU,ru;q=0.8,en-US;q=0.5,en;q=0.3
+      acceptEncoding: gzip, deflate, br
+      connection: keep-alive
+      other:
+        DNT: 1
+        Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+        X-Requested-With: XMLHttpRequest
+        Sec-Fetch-Dest: empty
+        Sec-Fetch-Mode: cors
+        Sec-Fetch-Site: same-origin
+        TE: trailers
+
     body:
-      isSuperConversionForm: false
-      isNeedCreateWallet: false
-      cardBindToWalletIntention: false
-      needPrepareNewPayment: false
-      isPaymentRechoiceSupported: false
-      paymentCardSynonym: af3Mi7mYWlrERVnHc_-3Wh_f.PC.001.202210
-      extAuthFailUri: https://yoomoney.ru/payments/internal/land3ds?orderId=2aed9d53-000f-5000-8000-1913554af8f9&isPaymentShop=true&couldPayByWallet=false&notEnoughMoney=false&isBindCardCheckboxPreselected=false&canCardBindToWallet=false
-      extAuthSuccessUri: https://yoomoney.ru/payments/internal/land3ds?orderId=2aed9d53-000f-5000-8000-1913554af8f9&is3dsAuthPassed=true&isPaymentShop=true&couldPayByWallet=false&notEnoughMoney=false&isBindCardCheckboxPreselected=false&canCardBindToWallet=false
-      cps_phone:
-      isDonationApprovedByPayer: false
-      sk: y7390ae620dc174e23c6eddb3a1e3d775
+      format: string
+      mimeType: application/x-www-form-urlencoded
+      postData:
+        isSuperConversionForm: false
+        isNeedCreateWallet: false
+        cardBindToWalletIntention: false
+        needPrepareNewPayment: false
+        isPaymentRechoiceSupported: false
+        paymentCardSynonym:
+        extAuthFailUri:
+        extAuthSuccessUri:
+        cps_phone: ''
+        isDonationApprovedByPayer: false
+        sk:
     response:
       expectedFields:
         sk:
         orderId:
-
