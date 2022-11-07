@@ -1,0 +1,15 @@
+header: hello
+body: 
+  - the body
+  - the body 1
+  - the body 2
+response:
+  name: goncharov
+  age: 4
+  amount: 40000
+
+other:
+  value:
+    key1: value1
+    key2: value2
+    key3: value3
