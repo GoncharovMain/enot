@@ -1,5 +1,10 @@
 *.exe
 
+
+
 /RequestYaml/bin/*
 /RequestYaml/obj/*
 /RequestYaml/.vs/*
+
+/src/Format/bin/*
+/src/Format/obj/*
