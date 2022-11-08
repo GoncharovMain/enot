@@ -191,6 +191,32 @@ namespace RequestYaml
             Console.WriteLine(second);
 
             Console.WriteLine(second);
+        
+            UnStruct unStruct = new UnStruct();
+
+            Console.WriteLine(unStruct[""]);
+            Console.WriteLine(unStruct);
+            Console.WriteLine(unStruct.Values[0]);
+        }
+
+        public class UnStruct
+        {
+            public String Value { get; set; }
+            public List<UnStruct> Values { get; set; }
+            public Dictionary<UnStruct, UnStruct> Dict { get; set; }
+
+
+            public static implicit operator UnStruct(Dictionary<UnStruct, UnStruct> dict) => new UnStruct { Dict = dict };
+            public static implicit operator UnStruct(List<UnStruct> values) => new UnStruct { Values = values };
+            public static implicit operator UnStruct(String value) => new UnStruct { Value = value };
+
+
+            public static implicit operator String(UnStruct unStruct) => unStruct.Value;
+            public UnStruct this[string name] => Dict[name];
+            public UnStruct this[int index] => Values[index];
+
+            public override int GetHashCode() => Value.GetHashCode();
+            
         }
 	}
 }
