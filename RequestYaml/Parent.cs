@@ -115,6 +115,37 @@ namespace U
             child = parent.Child;
             
             Console.WriteLine("{0}", child[0]);
+
+            string yamlText = @"
+requests:
+	first:
+		url: google.com
+		header:
+			ref: google
+			origin: google1
+		body:
+			text: hello world
+			list:
+				- value1 // index: 0
+				- value2 // index: 1
+				- value3 // index: 2
+	second:
+		url: ${requests.first.url}
+		header:
+			ref: ${requests.first.header.ref}
+		body: ${requests.first.body}
+	third:
+		url: ${requests.second.url}
+		header:
+			ref: yandex
+			origin: yandex.ru
+		body: ${requests.second.body}
+			list:
+				- ${requests.first.body.list[1]}
+				- ${requests.first.body.list[0]}
+				- ${requests.first.body.list[2]}
+
+";
         }
     }
 }

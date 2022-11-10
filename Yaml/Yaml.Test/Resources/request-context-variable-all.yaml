@@ -1,0 +1,17 @@
+requests:
+    google:
+        header: 
+            value: dynamic
+    yandex:
+        header:
+            value:
+                - value 1
+                - value 2
+                - value 3
+
+    vk:
+        header:
+            value:
+                name: John
+                age: 33
+                sex: male

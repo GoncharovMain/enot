@@ -3,3 +3,11 @@
 /RequestYaml/bin/*
 /RequestYaml/obj/*
 /RequestYaml/.vs/*
+
+/Yaml/.vs/*
+
+/Yaml/Yaml/bin/*
+/Yaml/Yaml/obj/*
+
+/Yaml/Yaml.Test/bin/*
+/Yaml/Yaml.Test/obj/*
